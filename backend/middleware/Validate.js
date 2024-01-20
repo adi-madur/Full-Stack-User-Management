@@ -25,7 +25,7 @@ const signUpDataValidate = (req, res, next) => {
     next();
 }
 
-const loginDataValidate = (req, res, next) => {
+const signinDataValidate = (req, res, next) => {
     const { username, password } = req.body;
 
     // Checking if all fields are provided
@@ -42,5 +42,5 @@ const loginDataValidate = (req, res, next) => {
 
 module.exports = {
     signUpDataValidate,
-    loginDataValidate,
+    signinDataValidate,
 }

@@ -1,8 +1,9 @@
 const express = require('express');
 const authRouter = express.Router();
-const { signup } = require('../controllers/authController.js');
-const { signUpDataValidate } = require('../middleware/Validate.js');
+const { signup, signin } = require('../controllers/authController.js');
+const { signUpDataValidate, signinDataValidate } = require('../middleware/Validate.js');
 
 authRouter.post('/signup', signUpDataValidate , signup);
+authRouter.post('/signin', signinDataValidate , signin);
 
 module.exports = authRouter;

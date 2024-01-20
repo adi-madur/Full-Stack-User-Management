@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
+const JWT = require('jsonwebtoken');
 
 const userSchema = new Schema({
     name: {
@@ -39,6 +40,20 @@ userSchema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, 10);
     return next();
 })
+
+// Token Generating method
+userSchema.methods = {
+    jwtToken() {
+        return JWT.sign(
+            // First part
+            {id: this._id,
+            email: this.email},
+            process.env.SECRET,
+            { expiresIn: '24h' }
+
+        )
+    }
+}
 
 const userModel = mongoose.model('user', userSchema);
 module.exports = userModel;
