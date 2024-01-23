@@ -49,7 +49,7 @@ const signin = async (req, res) => {
 
         // Now that user has provided correct credentials. We'll generate a token
 
-        const token = user.jwtToken();
+        const token = user.jwtToken(); // --> User defined Method of Schema
         user.password = undefined;
 
         // Cookie Object:

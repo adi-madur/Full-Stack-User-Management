@@ -1,5 +1,7 @@
+// Middlewares
+
 const emailValidator = require('email-validator');
-const bcrypt = require('bcrypt');
+const JWT = require('jsonwebtoken');
 
 const signUpDataValidate = (req, res, next) => {
     const { name, username, email, password, bio } = req.body;
@@ -40,7 +42,35 @@ const signinDataValidate = (req, res, next) => {
 
 }
 
+const authenticateUser = (req, res, next) => {
+    const token = (req.cookies && req.cookies.token) || null;
+
+    // If Token doesn't exist
+    if (!token) {
+        return res.status(400).json({
+            success: false,
+            message: "Not Authorized",
+        })
+    }
+
+    // If token exist
+    try {
+        const payload = JWT.verify(token, process.env.SECRET);
+
+    } catch (e) {
+        return res.status(400).json({
+            success: false,
+            message: "Not Authorized",
+        })
+    }
+    // If token exists then next();
+    next();
+
+
+}
+
 module.exports = {
     signUpDataValidate,
     signinDataValidate,
+    authenticateUser,
 }
