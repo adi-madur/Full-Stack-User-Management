@@ -33,11 +33,11 @@ const signup = async (req, res) => {
 }
 
 const signin = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try {
         // Finding user in database
         const user = await userModel
-        .findOne({email})
+        .findOne({username})
         .select('+password') // Also selects password cause defaultly it is `select: false`
 
         if(!user || await !(bcrypt.compare(password, user.password)) ) { // Compares password (encrypts it first) from body and password from database
@@ -74,7 +74,27 @@ const signin = async (req, res) => {
     }
 }
 
+const getUserInfo = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const user = await userModel.findById(userId);
+        return res.status(200).json({
+            success: true,
+            msg: "User info fetched successfully",
+            data: user,
+        })
+
+    } catch (e) {
+        return res.status(400).json({
+            success: false,
+            message: e.message,
+        })
+    }
+}
+
 module.exports = {
     signup,
     signin,
+    getUserInfo
 }

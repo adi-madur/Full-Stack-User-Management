@@ -43,8 +43,8 @@ const signinDataValidate = (req, res, next) => {
 }
 
 const authenticateUser = (req, res, next) => {
-    const token = (req.cookies && req.cookies.token) || null;
-
+    const token = (req.cookies && req.cookies.token) || null; // --> Extracting Cookies from token
+    
     // If Token doesn't exist
     if (!token) {
         return res.status(400).json({
@@ -52,11 +52,12 @@ const authenticateUser = (req, res, next) => {
             message: "Not Authorized",
         })
     }
-
+    
     // If token exist
     try {
         const payload = JWT.verify(token, process.env.SECRET);
-
+        req.user = {id: payload.id, email: payload.email } // i.e if token exists then extracting id and email from payload 
+        
     } catch (e) {
         return res.status(400).json({
             success: false,
